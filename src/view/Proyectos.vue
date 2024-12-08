@@ -30,8 +30,10 @@
             <td>{{ proyecto.ubicacion }}</td>
             <td>{{ proyecto.organizacion?.nombre || 'N/A' }}</td>
             <td>
-              <button @click="editarProyecto(proyecto)" class="btn btn-edit">Editar</button>
-              <button @click="eliminarProyecto(proyecto.proyectoId)" class="btn btn-delete">Eliminar</button>
+              <div class="action-buttons">
+                <button @click="editarProyecto(proyecto)" class="btn btn-edit">Editar</button>
+                <button @click="eliminarProyecto(proyecto.proyectoId)" class="btn btn-delete">Eliminar</button>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -255,6 +257,13 @@ tbody td {
 
 .btn-delete:hover {
   background-color: #c82333;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
 }
 
 .mensaje {

@@ -157,13 +157,16 @@ input {
 }
 
 button {
-  padding: 10px;
+  padding: 5px 10px; /* Botones más compactos */
+  font-size: 0.8em; /* Tamaño de fuente reducido */
+  margin-right: 3px; /* Espacio reducido entre botones */
+  border-radius: 4px;
   border: none;
   cursor: pointer;
 }
 
 .btn {
-  margin-right: 5px;
+  display: inline-block; /* Garantiza que los botones estén en línea */
 }
 
 .btn-editar {
@@ -188,16 +191,22 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-}
-
-thead {
-  background-color: #f8f9fa;
+  font-size: 0.9em; /* Tamaño de fuente reducido */
 }
 
 th, td {
   border: 1px solid #dee2e6;
-  padding: 10px;
+  padding: 8px; /* Espaciado más compacto */
   text-align: left;
+}
+
+td {
+  vertical-align: middle; /* Asegura que el contenido esté centrado verticalmente */
+}
+
+td:last-child {
+  white-space: nowrap; /* Evita el salto de línea */
+  text-align: center;
 }
 
 .mensaje {
@@ -205,3 +214,4 @@ th, td {
   color: green;
 }
 </style>
+
