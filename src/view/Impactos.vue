@@ -8,22 +8,22 @@
       <table>
         <thead>
           <tr>
-            <th>Impacto ID</th>
-            <th>Proyecto ID</th>
+            <th>Impacto</th>
+            <th>Proyecto</th>
             <th>Beneficiarios</th>
             <th>Satisfacción</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="impacto in impactos" :key="impacto.impacto_id">
-            <td>{{ impacto.impacto_id }}</td>
-            <td>{{ impacto.proyecto_id }}</td>
+          <tr v-for="impacto in impactos" :key="impacto.impactoId">
+            <td>{{ impacto.impactoId }}</td>
+            <td>{{ impacto.proyectoId }}</td>
             <td>{{ impacto.beneficiarios }}</td>
             <td>{{ impacto.satisfaccion }}</td>
             <td>
               <button @click="editarImpacto(impacto)" class="editar-btn">Editar</button>
-              <button @click="eliminarImpacto(impacto.impacto_id)" class="eliminar-btn">Eliminar</button>
+              <button @click="eliminarImpacto(impacto.impactoId)" class="eliminar-btn">Eliminar</button>
             </td>
           </tr>
         </tbody>
@@ -35,10 +35,10 @@
 
     <!-- Formulario de nuevo/actualizar impacto -->
     <form @submit.prevent="guardarImpacto">
-      <h3>{{ impacto.impacto_id ? 'Editar' : 'Crear' }} Impacto</h3>
+      <h3>{{ impacto.impactoId ? 'Editar' : 'Crear' }} Impacto</h3>
 
-      <label for="proyecto_id">Proyecto ID</label>
-      <input v-model="impacto.proyecto_id" type="number" id="proyecto_id" placeholder="ID del Proyecto" required />
+      <label for="proyectoId">Proyecto</label>
+      <input v-model="impacto.proyectoId" type="number" id="proyectoId" placeholder="ID del Proyecto" required />
 
       <label for="beneficiarios">Beneficiarios</label>
       <input v-model="impacto.beneficiarios" type="number" id="beneficiarios" placeholder="Número de beneficiarios" required />
@@ -46,7 +46,7 @@
       <label for="satisfaccion">Satisfacción</label>
       <input v-model="impacto.satisfaccion" type="number" step="0.1" id="satisfaccion" placeholder="Satisfacción (0-10)" required />
 
-      <button type="submit">{{ impacto.impacto_id ? 'Actualizar' : 'Crear' }} Impacto</button>
+      <button type="submit">{{ impacto.impactoId ? 'Actualizar' : 'Crear' }} Impacto</button>
     </form>
 
     <div v-if="mensaje" class="mensaje">{{ mensaje }}</div>
@@ -57,8 +57,8 @@
 import { ref, onMounted } from 'vue';
 
 const impacto = ref({
-  impacto_id: '',
-  proyecto_id: '',
+  impactoId: '',
+  proyectoId: '', 
   beneficiarios: '',
   satisfaccion: ''
 });
@@ -80,11 +80,11 @@ const cargarImpactos = async () => {
 
 // Guardar o actualizar impacto
 const guardarImpacto = async () => {
-  const url = impacto.value.impacto_id
-    ? `http://localhost:8080/api/impactos/${impacto.value.impacto_id}`
+  const url = impacto.value.impactoId
+    ? `http://localhost:8080/api/impactos/${impacto.value.impactoId}`
     : 'http://localhost:8080/api/impactos';
 
-  const method = impacto.value.impacto_id ? 'PUT' : 'POST';
+  const method = impacto.value.impactoId ? 'PUT' : 'POST';
 
   try {
     const response = await fetch(url, {
@@ -96,8 +96,8 @@ const guardarImpacto = async () => {
     });
 
     if (response.ok) {
-      mensaje.value = impacto.value.impacto_id ? 'Impacto actualizado correctamente.' : 'Impacto creado correctamente.';
-      impacto.value = { impacto_id: '', proyecto_id: '', beneficiarios: '', satisfaccion: '' };
+      mensaje.value = impacto.value.impactoId ? 'Impacto actualizado correctamente.' : 'Impacto creado correctamente.';
+      impacto.value = { impactoId: '', proyectoId: '', beneficiarios: '', satisfaccion: '' }; // Corregido proyecto_id a proyectoId
       cargarImpactos();
     } else {
       throw new Error('Hubo un problema al guardar el impacto.');

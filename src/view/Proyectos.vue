@@ -21,12 +21,12 @@
         </thead>
         <tbody>
           <tr v-for="proyecto in proyectos" :key="proyecto.proyectoId">
-            <td>{{ proyecto.proyectoId }}</td> <!-- Mostrar el ID del proyecto -->
+            <td>{{ proyecto.proyectoId }}</td>
             <td>{{ proyecto.nombre }}</td>
             <td>{{ proyecto.descripcion }}</td>
             <td>{{ proyecto.estado }}</td>
-            <td>{{ new Date(proyecto.fechaInicio).toLocaleDateString() }}</td>
-            <td>{{ new Date(proyecto.fechaFin).toLocaleDateString() }}</td>
+            <td>{{ formatFecha(proyecto.fechaInicio) }}</td>
+            <td>{{ formatFecha(proyecto.fechaFin) }}</td>
             <td>{{ proyecto.ubicacion }}</td>
             <td>{{ proyecto.organizacion?.nombre || 'N/A' }}</td>
             <td>
@@ -55,10 +55,20 @@
       <input v-model="proyecto.estado" type="text" id="estado" placeholder="Estado del proyecto" />
 
       <label for="fecha_inicio">Fecha de Inicio</label>
-      <input v-model="proyecto.fechaInicio" type="datetime-local" id="fecha_inicio" required />
+      <input
+        v-model="proyecto.fechaInicio"
+        type="datetime-local"
+        id="fecha_inicio"
+        required
+      />
 
       <label for="fecha_fin">Fecha de Fin</label>
-      <input v-model="proyecto.fechaFin" type="datetime-local" id="fecha_fin" required />
+      <input
+        v-model="proyecto.fechaFin"
+        type="datetime-local"
+        id="fecha_fin"
+        required
+      />
 
       <label for="ubicacion">Ubicación</label>
       <input v-model="proyecto.ubicacion" type="text" id="ubicacion" placeholder="Ubicación del proyecto" />
@@ -94,12 +104,24 @@ const proyectos = ref([]);
 const organizaciones = ref([]);
 const mensaje = ref('');
 
+// Formatear fechas para mostrar en la tabla
+const formatFecha = (fecha) => {
+  if (!fecha) return 'N/A';
+  const date = new Date(fecha);
+  return date.toLocaleDateString('es-ES');
+};
+
 // Cargar proyectos
 const cargarProyectos = async () => {
   try {
     const response = await fetch('http://localhost:8080/api/proyectos');
     if (response.ok) {
-      proyectos.value = await response.json();
+      const data = await response.json();
+      proyectos.value = data.map(proyecto => ({
+        ...proyecto,
+        fechaInicio: new Date(proyecto.fechaInicio).toISOString().slice(0, 16),
+        fechaFin: new Date(proyecto.fechaFin).toISOString().slice(0, 16)
+      }));
     }
   } catch (error) {
     mensaje.value = `Error: ${error.message}`;
@@ -160,7 +182,7 @@ const guardarProyecto = async () => {
 
 // Editar proyecto
 const editarProyecto = (proy) => {
-  proyecto.value = { ...proy, organizacionId: proy.organizacion.organizacionId };
+  proyecto.value = { ...proy, organizacionId: proy.organizacionId }; // Solo el ID de organización
 };
 
 // Eliminar proyecto
